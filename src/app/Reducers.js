@@ -1,19 +1,27 @@
 import {combineReducers} from 'redux';
-
-const FETCH_POSTS = 'FETCH_POSTS';
-const FETCH_POSTS_COMPLETE = 'FETCH_POSTS_COMPLETE';
+import * as types from './Constants';
 
 const reddit = (state = [{name:'demo'}], action) => {
   switch(action.type) {
-    case FETCH_POSTS:
+    case types.FETCH_POSTS:
       return state;
-      case FETCH_POSTS_COMPLETE:
+    case types.ADD_POST:
+      return [action.payload, ...state];
+      case types.FETCH_POSTS_COMPLETE:
         return action.payload;
     default:
       return state;
   }
 };
 
+const points = (state = [12], action) => {
+  switch(action.type) {
+    default:
+      return state;
+  }
+};
+
 export default combineReducers({
-  reddit
+  reddit,
+  points
 })

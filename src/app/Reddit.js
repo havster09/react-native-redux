@@ -1,10 +1,12 @@
 import React, {Component} from 'react';
-import {View, Text} from 'react-native';
+import {View, Text, TouchableOpacity} from 'react-native';
+import * as types from './Constants';
 import {connect} from 'react-redux';
 
-class _Reddit extends Component {
+class RedditComponent extends Component {
   constructor() {
     super();
+    this.handleAddPost = this.handleAddPost.bind(this);
   }
 
   /*componentWillMount() {
@@ -16,10 +18,32 @@ class _Reddit extends Component {
      })
   }*/
 
+  handleAddPost() {
+    this.props.addRedditPost();
+  }
+
   render() {
     return (
      <View>
+       <TouchableOpacity>
+         <Text>
+           2 points
+         </Text>
+       </TouchableOpacity>
+
+       <TouchableOpacity>
+         <Text>
+           - 2 points
+         </Text>
+       </TouchableOpacity>
+
+       <Text>{this.props.points} points</Text>
        <Text>Reddit</Text>
+       <TouchableOpacity onPress={this.handleAddPost}>
+         <Text>
+           ADD POST
+         </Text>
+       </TouchableOpacity>
        {this.props.posts.map((post, i) => <Text key={i}>{post.name}</Text>)}
      </View>
     )
@@ -27,8 +51,15 @@ class _Reddit extends Component {
 }
 
 const mapStateToProps = (state) => ({
-  posts: state.reddit
+  posts: state.reddit,
+  points:state.points
 });
 
-export const Reddit = connect(mapStateToProps, null)(_Reddit);
+const mapActionsToProps = (dispatch) => ({
+  addRedditPost(post={name:'blah'}) {
+    dispatch({type:types.ADD_POST, payload:post})
+  }
+});
+
+export const Reddit = connect(mapStateToProps, mapActionsToProps)(RedditComponent);
 
