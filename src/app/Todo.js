@@ -97,6 +97,7 @@ export class Todo extends Component {
          <View>
            {todos}
          </View>
+         <Reddit/>
        </View>
     )
   }
