@@ -7,6 +7,8 @@ class RedditComponent extends Component {
   constructor() {
     super();
     this.handleAddPost = this.handleAddPost.bind(this);
+    this.handleAddPoints = this.handleAddPoints.bind(this);
+    this.handleSubtractPoints = this.handleSubtractPoints.bind(this);
   }
 
   /*componentWillMount() {
@@ -22,16 +24,24 @@ class RedditComponent extends Component {
     this.props.addRedditPost();
   }
 
+  handleAddPoints() {
+    this.props.addPoints(2);
+  }
+
+  handleSubtractPoints() {
+    this.props.subtractPoints(2);
+  }
+
   render() {
     return (
      <View>
-       <TouchableOpacity>
+       <TouchableOpacity onPress={this.handleAddPoints}>
          <Text>
            2 points
          </Text>
        </TouchableOpacity>
 
-       <TouchableOpacity>
+       <TouchableOpacity onPress={this.handleSubtractPoints}>
          <Text>
            - 2 points
          </Text>
@@ -58,6 +68,12 @@ const mapStateToProps = (state) => ({
 const mapActionsToProps = (dispatch) => ({
   addRedditPost(post={name:'blah'}) {
     dispatch({type:types.ADD_POST, payload:post})
+  },
+  addPoints(points=2) {
+    dispatch({type:types.ADD_POINTS, payload:points})
+  },
+  subtractPoints(points=2) {
+    dispatch({type:types.SUBTRACT_POINTS, payload:points})
   }
 });
 
