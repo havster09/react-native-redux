@@ -25,7 +25,37 @@ const points = (state = [0], action) => {
   }
 };
 
+const todos = (state = [], action) => {
+  switch (action.type) {
+    case types.GET_TODOS:
+      return [...action.payload];
+    case types.GET_TODOS_SUCCESS:
+      return [...action.payload];
+    case types.CREATE_TODO:
+      return [action.payload, ...state];
+    case types.REMOVE_TODO:
+      return state.filter(todo => todo.id !== action.payload.id);
+    default:
+      return state;
+  }
+};
+
+const memes = (state = [], action) => {
+  switch (action.type) {
+    case types.GET_MEMES_SUCCESS:
+      return [...action.payload];
+    case types.CREATE_MEME:
+      return [action.payload, ...state];
+    case types.REMOVE_MEME:
+      return state.filter(meme => meme.id !== action.payload.id);
+    default:
+      return state;
+  }
+};
+
 export default combineReducers({
+  todos,
   reddit,
-  points
+  points,
+  memes
 })

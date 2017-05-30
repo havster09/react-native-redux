@@ -1,16 +1,18 @@
 import React from 'react';
 import {Provider} from 'react-redux';
-import {Store} from './src/app/Store';
+import configureStore from './src/app/Store';
 import {
   AppRegistry
 } from 'react-native';
-import {Todo} from "./src/app/Todo";
+import {Main} from './src/app/Main';
 
 
-const Main = () => (
- <Provider store={Store}>
-   <Todo/>
+export const store = configureStore();
+
+const Root = () => (
+ <Provider store={store}>
+   <Main/>
  </Provider>
 );
 
-AppRegistry.registerComponent('Todo', () => Main);
+AppRegistry.registerComponent('Todo', () => Root);

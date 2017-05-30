@@ -7,12 +7,17 @@ import {
 export const screenWidth = Dimensions.get('window').width;
 
 export const styles = StyleSheet.create({
+  linearGradient: {
+    flex: 1,
+    paddingLeft: 15,
+    paddingRight: 15,
+    borderRadius: 5
+  },
   container: {
     flex:1,
     justifyContent:'center',
     alignItems:'center',
-    padding:5,
-    backgroundColor:'rgba(1,0,0,.3)'
+    padding:5
   },
   box: {
     backgroundColor:'pink',

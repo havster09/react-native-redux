@@ -1,7 +1,8 @@
 import React, {Component} from 'react';
-import {View, Text, TouchableOpacity} from 'react-native';
+import {Text, TouchableOpacity, View} from 'react-native';
 import * as types from './Constants';
 import {connect} from 'react-redux';
+import {styles} from './styles';
 
 class RedditComponent extends Component {
   constructor() {
@@ -10,15 +11,6 @@ class RedditComponent extends Component {
     this.handleAddPoints = this.handleAddPoints.bind(this);
     this.handleSubtractPoints = this.handleSubtractPoints.bind(this);
   }
-
-  /*componentWillMount() {
-    window.fetch('https://www.reddit.com/.json', {
-      Accept: 'application/json'
-    }).then(response => response.json())
-     .then((response) => {
-      this.setState(Object.assign({},this.state,{posts:response.data.children}))
-     })
-  }*/
 
   handleAddPost() {
     this.props.addRedditPost();
@@ -34,7 +26,7 @@ class RedditComponent extends Component {
 
   render() {
     return (
-     <View>
+     <View style={styles.container}>
        <TouchableOpacity onPress={this.handleAddPoints}>
          <Text>
            2 points

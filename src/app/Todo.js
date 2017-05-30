@@ -1,104 +1,79 @@
 import React, {Component} from 'react';
 import {
   Text,
-  TextInput,
-  StyleSheet,
-  TouchableHighlight,
-  Dimensions,
-  TouchableOpacity,
   View
 } from 'react-native';
-import {styles} from './styles';
-import {Fancy} from "./Fancy";
-import {Reddit} from "./Reddit";
 
-export class Todo extends Component {
-  constructor() {
-    super();
+import {getTodos, createTodos, removeTodos} from './Actions';
+
+import * as types from './Constants';
+import {connect} from 'react-redux';
+import {styles} from './styles';
+import {TodoForm} from "./TodoForm";
+
+class TodoComponent extends Component {
+  constructor(props,context) {
+    super(props);
     this.state = {
-      todos: [],
+      todoId:1,
       newTodo: ''
     };
     this.handleChange = this.handleChange.bind(this);
-    this.handlePress = this.handlePress.bind(this);
+    this.handleCreateTodo = this.handleCreateTodo.bind(this);
+    this.handleRemoveTodo = this.handleRemoveTodo.bind(this);
   }
 
   componentWillMount() {
-    window.fetch('http://10.0.0.48:1337/todos', {
-      headers: {'Accept': 'application/json'}
-    }).then((response)=> {
-      return response.json();
-    })
-     .then(data => {
-       this.setState(Object.assign({},this.state,{
-         todos:[...data]
-       }))
-     });
+    this.props.getTodos();
   }
 
   handleChange(text) {
     this.setState(Object.assign({}, this.state, {newTodo: text}));
   }
 
-  handlePress() {
+  handleCreateTodo() {
     if (!this.state.newTodo) {
       return;
     }
-
-    window.fetch('http://10.0.0.48:1337/todos', {
-      method:'POST',
-      body: JSON.stringify({name:this.state.newTodo}),
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json',
-      }
-    }).then((response)=> response.json())
-     .then((data)=> {
-      console.log(data);
-       this.setState(Object.assign({}, this.state, {
-         todos: [{id: data.id, name:this.state.newTodo}, ...this.state.todos],
-         newTodo: ''
-       }));
-     })
+    this.props.createTodo({
+      name: this.state.newTodo
+    });
+    this.setState({newTodo:''});
   }
 
-  handleRemoveTodo(i) {
-    window.fetch(`http://10.0.0.48:1337/todos/${i}`, {
-      method: 'DELETE',
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json',
-      }
-    }).then((response) => response.json())
-     .then((data) => {
-      console.log(data);
-       const todos = this.state.todos.filter((todo) => todo.id !== i);
-       this.setState({
-         todos
-       })
-     });
+  handleRemoveTodo(todo) {
+    this.props.removeTodo(todo);
   }
 
   render() {
-    const todos = this.state.todos.sort((a,b)=> b.id-a.id).map((todo, i) => {
-      return <View key={todo.id}  style={styles.todosContainer}><Text style={styles.todos} onPress={this.handleRemoveTodo.bind(this, todo.id)}>{todo.name} {todo.id}</Text></View>
+    const todos = this.props.todos.sort((a,b)=> b.id-a.id).map((todo) => {
+      return <View key={todo.id}  style={styles.todosContainer}><Text style={styles.todos} onPress={this.handleRemoveTodo.bind(this, todo)}>{todo.name} {todo.id}</Text></View>
     });
     return (
-       <View style={styles.container}>
-         <Fancy/>
-         <Text style={styles.welcome}>
-           adb reverse tcp:8081 tcp:8081
-           echo fs.inotify.max_user_watches=524288 | sudo tee -a /etc/sysctl.conf && sudo sysctl -p
-         </Text>
-         <TextInput style={styles.textInput} value={this.state.newTodo} onChangeText={this.handleChange}/>
-         <TouchableOpacity style={styles.button} onPress={this.handlePress}>
-           <Text>Board Tap</Text>
-         </TouchableOpacity>
+     <View colors={['#4c669f', '#3b5998', '#192f6a']} style={styles.linearGradient}>
+         <TodoForm newTodo={this.state.newTodo} handleChange={this.handleChange} handleCreateTodo={this.handleCreateTodo}/>
          <View>
            {todos}
          </View>
-         <Reddit/>
-       </View>
+     </View>
     )
   }
 }
+
+const mapStateToProps = (state) => ({
+  todos:state.todos
+});
+
+const mapActionsToProps = (dispatch) => ({
+  getTodos() {
+    dispatch(getTodos())
+  },
+  createTodo(todo) {
+    dispatch(createTodos(todo))
+  },
+  removeTodo(todo) {
+    dispatch(removeTodos(todo))
+  },
+});
+
+export const Todo = connect(mapStateToProps, mapActionsToProps)(TodoComponent);
