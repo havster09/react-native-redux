@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import {
+  Image,
   Text,
   View
 } from 'react-native';
@@ -10,17 +11,17 @@ import * as types from './Constants';
 import {connect} from 'react-redux';
 import {styles} from './styles';
 import {TodoForm} from "./TodoForm";
+import {Icon} from 'native-base';
 
 class TodoComponent extends Component {
-  constructor(props,context) {
+  constructor(props, context) {
     super(props);
     this.state = {
-      todoId:1,
+      todoId: 1,
       newTodo: ''
     };
     this.handleChange = this.handleChange.bind(this);
     this.handleCreateTodo = this.handleCreateTodo.bind(this);
-    this.handleRemoveTodo = this.handleRemoveTodo.bind(this);
   }
 
   componentWillMount() {
@@ -38,7 +39,7 @@ class TodoComponent extends Component {
     this.props.createTodo({
       name: this.state.newTodo
     });
-    this.setState({newTodo:''});
+    this.setState({newTodo: ''});
   }
 
   handleRemoveTodo(todo) {
@@ -46,22 +47,27 @@ class TodoComponent extends Component {
   }
 
   render() {
-    const todos = this.props.todos.sort((a,b)=> b.id-a.id).map((todo) => {
-      return <View key={todo.id}  style={styles.todosContainer}><Text style={styles.todos} onPress={this.handleRemoveTodo.bind(this, todo)}>{todo.name} {todo.id}</Text></View>
+    const todos = this.props.todos.sort((a, b) => b.id - a.id).map((todo) => {
+      return <View key={todo.id} style={styles.todosContainer}><Text style={styles.todos}
+                                                                     onPress={this.handleRemoveTodo.bind(this, todo)}>{todo.name} {todo.id}</Text></View>
     });
     return (
-     <View colors={['#4c669f', '#3b5998', '#192f6a']} style={styles.linearGradient}>
-         <TodoForm newTodo={this.state.newTodo} handleChange={this.handleChange} handleCreateTodo={this.handleCreateTodo}/>
-         <View>
-           {todos}
-         </View>
+     <View style={styles.linearGradient}>
+       <Icon name='beer'/>
+       <Icon ios='ios-menu' android="md-menu" style={{fontSize: 20, color: 'red'}}/>
+       <Image source={require('../assets/hqdefault.jpg')} style={styles.image}/>
+       <TodoForm newTodo={this.state.newTodo} handleChange={this.handleChange}
+                 handleCreateTodo={this.handleCreateTodo}/>
+       <View>
+         {todos}
+       </View>
      </View>
     )
   }
 }
 
 const mapStateToProps = (state) => ({
-  todos:state.todos
+  todos: state.todos
 });
 
 const mapActionsToProps = (dispatch) => ({

@@ -1,6 +1,6 @@
 import * as types from './Constants';
 
-const apiUrl = 'http://10.0.0.48';
+const apiUrl = 'http://192.168.43.226';
 
 export const getTodos = () => (
  dispatch => (
@@ -43,6 +43,16 @@ export const removeTodos = (todo) => (
    .then(() => {
      return dispatch({type:types.REMOVE_TODO, payload:todo});
    })
+ )
+);
+
+export const deleteMeme = (meme) => (
+ dispatch => (
+  fetch(`${apiUrl}:1337/memes/${meme.id}`, {
+    method: 'DELETE',
+    headers: {'Content-Type':'application/json'}
+  })
+   .then(()=> dispatch({type:types.REMOVE_MEME, payload: meme}))
  )
 );
 

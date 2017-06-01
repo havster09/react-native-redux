@@ -1,9 +1,9 @@
 import React, {Component} from 'react';
 import * as types from './Constants';
 import {connect} from 'react-redux';
-import {Container, Content, Button, Text, Card, CardItem, Icon, Right} from 'native-base';
+import {Container, Content, Button, Text, Card, CardItem, Icon, Right, ListItem, List} from 'native-base';
 
-import {getMemes,createMeme} from './Actions';
+import {getMemes,createMeme,deleteMeme} from './Actions';
 
 
 class ButtonReactBaseComponent extends Component {
@@ -15,6 +15,10 @@ class ButtonReactBaseComponent extends Component {
 
   componentWillMount() {
     this.props.getMemes();
+  }
+
+  handleDeleteMeme(meme) {
+    this.props.deleteMeme(meme);
   }
 
   handleCreateLightMeme() {
@@ -30,6 +34,11 @@ class ButtonReactBaseComponent extends Component {
   }
 
   render() {
+    const memesList = this.props.memes.map((meme, i)=>{
+      return (
+       <ListItem onPress={this.handleDeleteMeme.bind(this, meme)} key={meme.id}><Text>{meme.name}</Text></ListItem>
+       );
+    });
     return (
      <Container>
        <Content>
@@ -43,7 +52,9 @@ class ButtonReactBaseComponent extends Component {
        </Content>
 
        <Content>
-         {this.props.memes.map((meme, i)=><Text key={meme.id}>{meme.name}</Text>)}
+         <List>
+           {memesList}
+         </List>
        </Content>
 
        <Container>
@@ -74,6 +85,9 @@ const mapActionsToProps = (dispatch) => ({
   },
   createMeme(meme) {
     dispatch(createMeme(meme))
+  },
+  deleteMeme(meme) {
+    dispatch(deleteMeme(meme))
   }
 });
 

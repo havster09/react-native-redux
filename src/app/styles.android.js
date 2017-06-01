@@ -19,6 +19,12 @@ export const styles = StyleSheet.create({
     alignItems:'center',
     padding:5
   },
+  image: {
+    flex: 1,
+    width: null,
+    height: null,
+    resizeMode: 'contain'
+  },
   box: {
     backgroundColor:'pink',
     width:100,
